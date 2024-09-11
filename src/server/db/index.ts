@@ -11,8 +11,9 @@ const client = new Client({
 	host:env.AZURE_DB_HOST,
 	port:5432,
 	user: env.AZURE_DB_USER,
-  	password: env.AZURE_DB_USER,
-  	database: "db_name",
+  	password: env.AZURE_DB_PASSWORD,
+  	database: env.AZURE_DB_NAME,
+	ssl:true,
 
 })
 

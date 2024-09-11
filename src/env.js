@@ -26,7 +26,8 @@ export const env = createEnv({
     DISCORD_CLIENT_SECRET: z.string(),
 	AZURE_DB_PASSWORD: z.string(),
 	AZURE_DB_USER: z.string(),
-	AZURE_DB_HOST: z.string()
+	AZURE_DB_HOST: z.string(),
+	AZURE_DB_NAME: z.string(),
   },
 
   /**
@@ -46,12 +47,15 @@ export const env = createEnv({
 	AZURE_DB_HOST: process.env.AZURE_DB_HOST,
 	AZURE_DB_USER: process.env.AZURE_DB_USER,
 	AZURE_DB_PASSWORD: process.env.AZURE_DB_PASSWORD,
+	AZURE_DB_NAME: process.env.AZURE_DB_NAME,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+
+
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
