@@ -9,11 +9,11 @@ import {
   primaryKey,
   pgTable,
   text,
+  serial,
   pgSchema,
   
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
-import { Schema } from "zod";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -22,29 +22,6 @@ import { Schema } from "zod";
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
 
-/*export const posts = createTable(
-  "post",
-  {
-    id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-    name: text("name", { length: 256 }),
-    createdById: text("created_by", { length: 255 })
-      .notNull()
-      .references(() => users.id),
-    createdAt: int("created_at", { mode: "timestamp" })
-      .default(sql`(unixepoch())`)
-      .notNull(),
-    updatedAt: int("updatedAt", { mode: "timestamp" }).$onUpdate(
-      () => new Date()
-    ),
-  },
-  (example) => ({
-    createdByIdIdx: index("created_by_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
-  })
-);
-*/
-
-export const mySchema = pgSchema("social-media-map-schema");
 
 export const users = pgTable("user", {
   id: varchar('id',{length: 256})
@@ -53,7 +30,7 @@ export const users = pgTable("user", {
     .$defaultFn(() => crypto.randomUUID()),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
-  emailVerified: timestamp('emailVerified').default(sql`Current_Timestamp()`),
+  emailVerified: timestamp('emailVerified').defaultNow(),
   image: varchar("image", { length: 255 }),
 });
 
@@ -99,7 +76,7 @@ export const sessions = pgTable(
     userId: varchar("userId", { length: 255 })
       .notNull()
       .references(() => users.id),
-    expires: timestamp("expires").notNull(),
+    expires: timestamp("expires").notNull().defaultNow(),
   },
   (session) => ({
     userIdIdx: index("session_userId_idx").on(session.userId),
@@ -115,9 +92,26 @@ export const verificationTokens = pgTable(
   {
     identifier: varchar("identifier", { length: 255 }).notNull(),
     token: varchar("token", { length: 255 }).notNull(),
-    expires: timestamp("expires").notNull(),
+    expires: timestamp("expires").notNull().defaultNow(),
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
+  })
+);
+
+export const posts = pgTable(
+  "post",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 256 }),
+    createdById: varchar("created_by", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+  },
+  (example) => ({
+    createdByIdIdx: index("created_by_idx").on(example.createdById),
+    nameIndex: index("name_idx").on(example.name),
   })
 );

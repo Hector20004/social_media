@@ -2,36 +2,46 @@
 
 import * as React from "react";
 import { MapContainer,TileLayer,Marker,Popup} from "react-leaflet";
-import {Icon} from "leaflet";
-import { Marker as MarkerLeaflet,icon} from "leaflet";
-import L from "leaflet";
+import { Marker as MarkerLeaflet,Icon,point,divIcon, DivIcon} from "leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
 import 'leaflet/dist/leaflet.css'
 //import MapController from "~/app/_components/MapController";
 
 
+
+  
+  {/*Marker Icon*/}
+
 export default function Map(){
-	MarkerLeaflet.prototype.options.icon = icon({
-		iconUrl: 'marker-icon.png',
-		iconRetinaUrl: 'marker-icon.png',
-		iconSize: [24, 24],
-		iconAnchor: [12, 24],
-		shadowUrl: 'marker-shadow.png',
-		shadowRetinaUrl: 'marker-shadow.png',
-		shadowSize: [41, 41],
-		shadowAnchor: [12, 41],
-	  })
+	  const customIcon = new Icon({
+		iconUrl: "maps-and-flags.png", // require('') works to if your having issues rendering
+		iconSize: [38, 38],
+			iconAnchor: [12, 24],
+	  });
+
+	const markers = [
+		{
+		  geocode: [28.6024, -81.2001],
+		  popUp: "HOME OF THE KNIGHTS!!!!!!!!"
+		},
+		{
+		  geocode: [28.4449, -81.4590],
+		  popUp: "LOCKHEED MARTIN"
+		}
+	  ];
+	  
 	return (
-		<div id="map" >
-			<MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false} style={{height: '180px',width: '300px'}}>
-				<TileLayer
-    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-			<Marker position={[51.505, -0.09]}>
-    			<Popup>
-      			A pretty CSS3 popup. <br /> Easily customizable.
-    			</Popup >
-  </Marker>
-			</MapContainer>
-		</div>
-	)
+		<>
+		<MapContainer center={[28.5384, -81.3789]} zoom={13} style={{ height: "100vh", width: "100%" }}>
+      		<TileLayer
+      		attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      		url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+      		{/* Cool Map */}
+      		<TileLayer
+      		attribution='Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>'
+      		url="https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}"
+      	/>
+    	</MapContainer>
+	</>
+  );
 }
